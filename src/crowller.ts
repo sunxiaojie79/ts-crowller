@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import sueragent from 'superagent';
+import superagent from 'superagent';
 import BookAnalyzer from './bookAnalyzer'
 
 export interface Analyzer {
@@ -20,7 +20,7 @@ class Crowller {
   }
   
   private async getRowHtml (url: string) {
-    const result = await sueragent.get(url);
+    const result = await superagent.get(url);
     return result.text;
   }
   private writeFile (content: string) {
