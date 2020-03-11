@@ -29,7 +29,7 @@ export default class BookAnalyzer implements Analyzer{
     return BookAnalyzer.instance;
   }
   
-  private getBookInfo (html: string) {
+  private getBookInfo (html: string): BookResults {
     const $ = cheerio.load(html);
     const bookItems = $('.market-books .list-col .info');
     const bookInfos: Book[]= [];
@@ -44,7 +44,7 @@ export default class BookAnalyzer implements Analyzer{
     }
   }
 
-  private generateJsonContent (info: BookResults, filePath: string) {
+  private generateJsonContent (info: BookResults, filePath: string): Content {
     let fileContent: Content = {}
     if (fs.existsSync(filePath)) {
       fileContent = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
