@@ -13,7 +13,7 @@ class Crowller {
     this.initSpiderProcess();
   }
 
-  async initSpiderProcess () {
+  private async initSpiderProcess () {
     const html = await this.getRowHtml(this.url);
     const fileContent = this.analyzer.analyze(html, this.filePath);
     this.writeFile(fileContent);
@@ -23,9 +23,9 @@ class Crowller {
     const result = await sueragent.get(url);
     return result.text;
   }
-   private writeFile (content: string) {
-    fs.writeFileSync(this.filePath, content);
-   }
+  private writeFile (content: string) {
+  fs.writeFileSync(this.filePath, content);
+  }
   
 }
 const url = 'https://book.douban.com/';
