@@ -1,65 +1,33 @@
 import fs from 'fs';
 import path from 'path';
 import sueragent from 'superagent';
-import cheerio from 'cheerio';
+import BookAnalyzer from './bookAnalyzer'
 
-interface Book {
-  title: string,
-  price: number
+export interface Analyzer {
+  analyze: (html: string, filePath: string) => string
 }
 
-interface BookResults {
-  time: number;
-  data: Book[];
-}
-
-interface Content {
-  [propName: number]: Book[]
-}
 class Crowller {
-  private url = 'https://book.douban.com/';
-
-  constructor () {
+  private filePath = path.resolve(__dirname, '../data/book.json');
+  constructor (private url: string, private analyzer: Analyzer) {
     this.initSpiderProcess();
   }
 
   async initSpiderProcess () {
-    let filePath = path.resolve(__dirname, '../data/book.json');
     const html = await this.getRowHtml(this.url);
-    const info = this.getBookInfo(html);
-    const fileContent = this.generateJsonContent(info);
-    fs.writeFileSync(filePath, JSON.stringify(fileContent));
+    const fileContent = this.analyzer.analyze(html, this.filePath);
+    this.writeFile(fileContent);
   }
   
-  async getRowHtml (url: string) {
+  private async getRowHtml (url: string) {
     const result = await sueragent.get(url);
     return result.text;
   }
-
-  getBookInfo (html: string) {
-    const $ = cheerio.load(html);
-    const bookItems = $('.market-books .list-col .info');
-    const bookInfos: Book[]= [];
-    bookItems.map((index, element) => {
-      const title = $(element).find('.title a').text();
-      const price = parseInt($(element).find('.price').text().split('￥')[1], 10);
-      bookInfos.push({title, price});
-    });
-    return {
-      time: new Date().getTime(),
-      data: bookInfos
-    }
-  }
-
-  generateJsonContent (info: BookResults) {
-    let filePath = path.resolve(__dirname, '../data/book.json');
-    let fileContent: Content = {}
-    if (fs.existsSync(filePath)) {
-      fileContent = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-    }
-    fileContent[info.time] = info.data;
-    return fileContent;
-  }
+   private writeFile (content: string) {
+    fs.writeFileSync(this.filePath, content);
+   }
+  
 }
-
-const crowller = new Crowller();
+const url = 'https://book.douban.com/';
+const analyzer = BookAnalyzer.getInstance();
+new Crowller(url, analyzer);
