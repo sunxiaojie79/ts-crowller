@@ -12,7 +12,7 @@ app.use(cookieSession({
   maxAge: 24 * 60 * 60 * 1000
 }))
 app.use((req: Request, res: Response, next: NextFunction) => {
-  req.customProp = 'this is a custom property';
+  req.customProp = '这是在Request上面➕的一个自定义属性';
   next();
 })
 
