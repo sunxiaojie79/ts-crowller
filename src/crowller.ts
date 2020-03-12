@@ -1,13 +1,12 @@
 import fs from 'fs';
 import path from 'path';
 import superagent from 'superagent';
-import BookAnalyzer from './bookAnalyzer'
 
 export interface Analyzer {
   analyze: (html: string, filePath: string) => string
 }
 
-class Crowller {
+export default class Crowller {
   private filePath = path.resolve(__dirname, '../data/book.json');
   constructor (private url: string, private analyzer: Analyzer) {
     this.initSpiderProcess();
@@ -28,6 +27,4 @@ class Crowller {
   }
   
 }
-const url = 'https://book.douban.com/';
-const analyzer = BookAnalyzer.getInstance();
-new Crowller(url, analyzer);
+
