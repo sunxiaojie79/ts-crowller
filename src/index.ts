@@ -1,10 +1,15 @@
-import express, { Request, Response} from 'express';
+import express, { Request, Response, NextFunction} from 'express';
 import router from './router';
 import bodyParser from 'body-parser';
 
 const app = express();
 
 app.use(bodyParser.urlencoded({ extended: false }))
+
+app.use((req: Request, res: Response, next: NextFunction) => {
+  req.customProp = 'this is a custom property';
+  next();
+})
 
 app.use(router);
 

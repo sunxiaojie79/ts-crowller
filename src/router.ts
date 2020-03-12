@@ -4,7 +4,13 @@ import BookAnalyzer from './bookAnalyzer'
 
 const router = Router();
 
-router.get('/', (req: Request, res: Response) => {
+interface RequestWithBody extends Request {
+  body: {
+    [key: string]: string | undefined;
+  };
+}
+
+router.get('/', (req: RequestWithBody, res: Response) => {
   res.send(`
     <html>
       <body>
@@ -16,14 +22,15 @@ router.get('/', (req: Request, res: Response) => {
     </html>
   `)
 });
-router.post('/getData', (req: Request, res: Response) => {
-  if (req.body.password === '123') {
+router.post('/getData', (req: RequestWithBody, res: Response) => {
+  const {password} = req.body
+  if (password === '123') {
     const url = 'https://book.douban.com/';
     const analyzer = BookAnalyzer.getInstance();
     new Crowller(url, analyzer);
     res.send('get data success');
   } else {
-    res.send('get data fail');
+    res.send(`${req.customProp}, get data fail`);
   }
 });
 
