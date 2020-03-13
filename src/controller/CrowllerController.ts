@@ -1,8 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 import 'reflect-metadata';
-import { Request, Response, NextFunction } from 'express';
-import { get, useMiddleWare, controller} from './decorator';
+import { Request, Response, NextFunction, RequestHandler } from 'express';
+import { get, useMiddleWare, controller} from '../decorator';
 import { getResponseData } from '../utils/util';
 import Crowller from '../utils/crowller';
 import BookAnalyzer from '../utils/bookAnalyzer';
@@ -13,7 +13,7 @@ interface RequestWithBody extends Request {
   };
 }
 
-const checkLogin = (req: Request, res: Response, next: NextFunction) => {
+const checkLogin: RequestHandler = (req: Request, res: Response, next: NextFunction): void => {
   const isLogin = req.session ? req.session.login : false;
   if (isLogin) {
     next();
@@ -22,11 +22,11 @@ const checkLogin = (req: Request, res: Response, next: NextFunction) => {
   }
 }
 
-@controller
-class CrowllerController {
+@controller('/')
+export class CrowllerController {
   @get('/getData')
   @useMiddleWare(checkLogin)
-  getData(req: RequestWithBody, res: Response){
+  getData(req: RequestWithBody, res: Response): void{
     const url = 'https://book.douban.com/';
     const analyzer = BookAnalyzer.getInstance();
     new Crowller(url, analyzer);
@@ -35,7 +35,7 @@ class CrowllerController {
 
   @get('/showData')
   @useMiddleWare(checkLogin)
-  showData(req: RequestWithBody, res: Response){
+  showData(req: RequestWithBody, res: Response): void{
     try {
       const filePath = path.resolve(__dirname, '../../data/book.json');
       const content = fs.readFileSync(filePath, 'utf-8');

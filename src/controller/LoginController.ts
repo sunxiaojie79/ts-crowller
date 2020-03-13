@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { Router, Request, Response, NextFunction } from 'express';
-import { get, post, controller} from './decorator';
+import { get, post, controller} from '../decorator';
 import { getResponseData } from '../utils/util';
 
 interface RequestWithBody extends Request {
@@ -9,8 +9,8 @@ interface RequestWithBody extends Request {
   };
 }
 
-@controller
-class LoginController {
+@controller('/')
+export class LoginController {
   @get('/logout')
   logout(req: RequestWithBody, res: Response){
     if (req.session) {
