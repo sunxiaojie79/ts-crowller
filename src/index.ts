@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction} from 'express';
 import bodyParser from 'body-parser';
 import cookieSession from 'cookie-session';
 import './controller/LoginController';
+import './controller/CowllerController';
 import {router} from './controller/decorator';
 
 const app = express();
