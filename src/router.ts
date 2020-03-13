@@ -23,30 +23,6 @@
 //   }
 // }
 
-// // router.get('/', () => {});
-
-// router.post('/login', (req: RequestWithBody, res: Response) => {
-//   const isLogin = req.session ? req.session.login : false;
-//   const {password} = req.body
-//   if (isLogin) {
-//     res.send(getResponseData(false, `${req.customProp}, 已登录`));
-//   } else {
-//     if (password === '123' && req.session) {
-//       req.session.login = true
-//       res.send(getResponseData(true));
-//     } else {
-//       res.send(getResponseData(false, `${req.customProp}, 登录失败`));
-//     }
-//   }
-// });
-
-// // router.get('/logout', (req: RequestWithBody, res: Response) => {
-// //   if (req.session) {
-// //     req.session.login = undefined;
-// //   }
-// //   res.send(getResponseData(true));
-// // });
-
 // router.get('/getData', checkLogin, (req: RequestWithBody, res: Response) => {
 //   const url = 'https://book.douban.com/';
 //   const analyzer = BookAnalyzer.getInstance();

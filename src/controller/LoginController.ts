@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { Router, Request, Response, NextFunction } from 'express';
-import { get, controller} from './decorator';
+import { get, post, controller} from './decorator';
 import { getResponseData } from '../utils/util';
 
 interface RequestWithBody extends Request {
@@ -17,6 +17,22 @@ class LoginController {
       req.session.login = undefined;
     }
     res.send(getResponseData(true));
+  }
+
+  @post('/login')
+  login(req: RequestWithBody, res: Response){
+    const isLogin = req.session ? req.session.login : false;
+    const {password} = req.body
+    if (isLogin) {
+      res.send(getResponseData(false, `${req.customProp}, 已登录`));
+    } else {
+      if (password === '123' && req.session) {
+        req.session.login = true
+        res.send(getResponseData(true));
+      } else {
+        res.send(getResponseData(false, `${req.customProp}, 登录失败`));
+      }
+    }
   }
 
   @get('/')
