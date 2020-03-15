@@ -15,7 +15,6 @@ interface RequestWithBody extends Request {
 
 const checkLogin: RequestHandler = (req: Request, res: Response, next: NextFunction): void => {
   debugger;
-  console.log('checkLogin middleware')
   const isLogin = req.session ? req.session.login : false;
   if (isLogin) {
     next();
@@ -26,7 +25,6 @@ const checkLogin: RequestHandler = (req: Request, res: Response, next: NextFunct
 
 const test: RequestHandler = (req: Request, res: Response, next: NextFunction): void => {
   debugger;
-  console.log('test middleware');
   next();
 }
 @controller('/')
