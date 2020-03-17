@@ -27,7 +27,7 @@ const test: RequestHandler = (req: Request, res: Response, next: NextFunction): 
   debugger;
   next();
 }
-@controller('/')
+@controller('/api')
 export class CrowllerController {
   @get('/getData')
   @useMiddleWare(checkLogin)
