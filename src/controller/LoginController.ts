@@ -11,8 +11,18 @@ interface RequestWithBody extends Request {
 
 @controller('/')
 export class LoginController {
+  static isLogin (req: RequestWithBody): boolean {
+    return !!(req.session ? req.session.login : false);
+  }
+
+  @get('/api/isLogin')
+  isLogin(req: RequestWithBody, res: Response): void{
+    const isLogin = LoginController.isLogin(req);
+    res.json(getResponseData(isLogin));
+  }
+
   @get('/logout')
-  logout(req: RequestWithBody, res: Response){
+  logout(req: RequestWithBody, res: Response): void{
     if (req.session) {
       req.session.login = undefined;
     }
@@ -20,8 +30,8 @@ export class LoginController {
   }
 
   @post('/login')
-  login(req: RequestWithBody, res: Response){
-    const isLogin = req.session ? req.session.login : false;
+  login(req: RequestWithBody, res: Response): void{
+    const isLogin = LoginController.isLogin(req);
     const {password} = req.body
     if (isLogin) {
       res.send(getResponseData(false, `${req.customProp}, 已登录`));
@@ -36,8 +46,8 @@ export class LoginController {
   }
 
   @get('/')
-  home(req: RequestWithBody, res: Response){
-    const isLogin = req.session ? req.session.login : false;
+  home(req: RequestWithBody, res: Response): void{
+    const isLogin = LoginController.isLogin(req);
     if (isLogin) {
       res.send(`
         <html>
