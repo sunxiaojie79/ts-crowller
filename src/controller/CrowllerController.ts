@@ -12,7 +12,14 @@ interface RequestWithBody extends Request {
     [key: string]: string | undefined;
   };
 }
+interface BookItem {
+  title: string,
+  price: number
+}
 
+interface DataStructure {
+  [key: string]: BookItem[];
+}
 const checkLogin: RequestHandler = (req: Request, res: Response, next: NextFunction): void => {
   debugger;
   const isLogin = req.session ? req.session.login : false;
@@ -36,7 +43,7 @@ export class CrowllerController {
     const url = 'https://book.douban.com/';
     const analyzer = BookAnalyzer.getInstance();
     new Crowller(url, analyzer);
-    res.send(getResponseData(true));
+    res.send(getResponseData<boolean>(true));
   };
 
   @get('/showData')
@@ -45,9 +52,9 @@ export class CrowllerController {
     try {
       const filePath = path.resolve(__dirname, '../../data/book.json');
       const content = fs.readFileSync(filePath, 'utf-8');
-      res.send(getResponseData(JSON.parse(content)));
+      res.send(getResponseData<DataStructure>(JSON.parse(content)));
     } catch (e){
-      res.send(getResponseData(false, `尚未爬取到内容`));
+      res.send(getResponseData<boolean>(false, `尚未爬取到内容`));
     }
   };
 }
